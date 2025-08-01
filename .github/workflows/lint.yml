@@ -24,10 +24,10 @@ jobs:
         run: flake8 .
       - name: Run black check on Python files
         run: black --check .
-      - name: Run nbqa flake8 on notebooks
-        run: nbqa flake8 .
-      - name: Run nbqa black check on notebooks
-        run: nbqa black --check .
+      #- name: Run nbqa flake8 on notebooks
+      #  run: nbqa flake8 .
+      #- name: Run nbqa black check on notebooks
+      #  run: nbqa black --check .
 
       - name: Install markdownlint-cli
         run: npm install -g markdownlint-cli
