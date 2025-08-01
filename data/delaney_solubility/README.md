@@ -14,15 +14,14 @@ Each sample in the dataset represents a molecule, described by a set of calculat
 | `AromaticProportion`  | Proportion of aromatic atoms relative to total heavy atoms    |
 | `logS`                | Target variable — log of aqueous solubility (mol/L)          |
 
-
 ```math
 logS = f(MolLogP, MolWt, NumRotatableBonds, AromaticProportion)
 ```
 
-
 ## 📈 Why It Matters
 
 Solubility directly affects:
+
 - **Absorption**: Poor solubility limits a drug's effectiveness
 - **Distribution**: Solubility influences how a drug spreads through the body
 - **Formulation**: Helps in deciding excipients and dosage forms
