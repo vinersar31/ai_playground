@@ -1,2 +1,2 @@
 /.vs
-./models/image_detection/*.pt
+/models/image_detection/*.pt
