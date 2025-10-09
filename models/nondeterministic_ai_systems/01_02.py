@@ -14,16 +14,17 @@ client = OpenAI(
     api_key=os.getenv("OPENAI_API_KEY"),
 )
 
-quiz_template = '''
+quiz_template = """
     What do ducks eat?
 
     A) Only plants
     B) Only fish
     * C) Seeds, small fish, insects, and plants
     D) Chocolate Cake
-'''
+"""
 
 from openai import OpenAI
+
 client = OpenAI()
 
 
@@ -33,10 +34,10 @@ def generate_completion(client, prompt):
         messages=[
             {
                 "role": "system",
-                "content": "You are a helpful assistant. Use the quiz template as a template for your answers."
+                "content": "You are a helpful assistant. Use the quiz template as a template for your answers.",
             },
-            {"role": "user", "content": prompt}
-        ]
+            {"role": "user", "content": prompt},
+        ],
     )
     print("Message: \n" + str(completion.choices[0].message.content))
 
@@ -44,5 +45,6 @@ def generate_completion(client, prompt):
 # repeat generate_completion() five times
 for i in range(5):
     generate_completion(
-        client, "Create a multiple-choice question about ducks. Provide four answers A to D where one is correct and the others are plausible distractors. Mark the correct answer with an asterisk."
+        client,
+        "Create a multiple-choice question about ducks. Provide four answers A to D where one is correct and the others are plausible distractors. Mark the correct answer with an asterisk.",
     )

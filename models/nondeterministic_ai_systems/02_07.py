@@ -15,6 +15,7 @@ client = OpenAI(
 )
 
 from openai import OpenAI
+
 client = OpenAI()
 
 
@@ -25,11 +26,8 @@ def generate_completion(client, prompt):
         top_p=1,
         seed=42,
         messages=[
-            {
-                "role": "system",
-                "content": "You are a helpful assistant."
-            },
-            {"role": "user", "content": prompt}
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": prompt},
         ],
         tools=[
             {
@@ -44,22 +42,29 @@ def generate_completion(client, prompt):
                                 "type": "string",
                                 "description": "The city and state, e.g. San Francisco, CA",
                             },
-                            "unit": {"type": "string", "enum": ["celsius", "fahrenheit"]},
+                            "unit": {
+                                "type": "string",
+                                "enum": ["celsius", "fahrenheit"],
+                            },
                         },
                         "required": ["location", "unit"],
                     },
-                }
+                },
             }
         ],
-        tool_choice="auto"
+        tool_choice="auto",
     )
     print("Message: \n" + str(completion.choices[0].message.content))
-    print("Function name: \n" + str(completion.choices[0].message.tool_calls[0].function.name))
-    print("Function arguments: \n" + str(completion.choices[0].message.tool_calls[0].function.arguments))
+    print(
+        "Function name: \n"
+        + str(completion.choices[0].message.tool_calls[0].function.name)
+    )
+    print(
+        "Function arguments: \n"
+        + str(completion.choices[0].message.tool_calls[0].function.arguments)
+    )
 
 
 # repeat generate_completion() five times
 for i in range(5):
-    generate_completion(
-        client, "What's the weather like in Burnaby?"
-    )
+    generate_completion(client, "What's the weather like in Burnaby?")
