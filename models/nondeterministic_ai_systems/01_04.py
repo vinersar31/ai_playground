@@ -61,11 +61,11 @@ def generate_completion(client, prompt):
             {"role": "user", "content": prompt}
         ]
     )
-    print(f"Message: \n{completion.choices[0].message.content}")
+    print("Message: \n" + str(completion.choices[0].message.content))
 
 
 # repeat generate_completion() five times
 for i in range(5):
     generate_completion(
-        client, f"The food at the park was excellent!"
+        client, "The food at the park was excellent!"
     )

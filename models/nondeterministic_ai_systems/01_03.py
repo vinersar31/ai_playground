@@ -22,19 +22,19 @@ def generate_completion(client, prompt):
     completion = client.chat.completions.create(
         model="gpt-4-turbo-preview",
         messages=[
-                        {
-                            "role": "system",
-                            "content": "You're a sentiment analyst. Analyze the sentiment of the provided statement."
-              # "content": f"You're a sentiment analyst. Analyze the sentiment of the provided statement. Give it a classification of positive, neutral, or negative. Give me only the classification, nothing else.",
+            {
+                "role": "system",
+                "content": "You're a sentiment analyst. Analyze the sentiment of the provided statement."
+                # "content": "You're a sentiment analyst. Analyze the sentiment of the provided statement. Give it a classification of positive, neutral, or negative. Give me only the classification, nothing else."
             },
             {"role": "user", "content": prompt}
         ]
     )
-    print(f"Message: \n{completion.choices[0].message.content}")
+    print("Message: \n" + str(completion.choices[0].message.content))
 
 
 # repeat generate_completion() five times
 for i in range(5):
     generate_completion(
-        client, f"Look at the broad wingspan of this duck!"
+        client, "Look at the broad wingspan of this duck!"
     )

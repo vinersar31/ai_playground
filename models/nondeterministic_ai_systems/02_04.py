@@ -57,18 +57,18 @@ def generate_completion(client, prompt):
         top_p=0,
         seed=42,
         messages=[
-                        {
-                            "role": "system",
-                            "content": "You are a helpful assistant."
+            {
+                "role": "system",
+                "content": "You are a helpful assistant."
             },
             {"role": "user", "content": prompt}
         ]
     )
-    print(f"Message: \n{completion.choices[0].message.content}")
+    print("Message: \n" + str(completion.choices[0].message.content))
 
 
 # repeat generate_completion() five times
 for i in range(5):
     generate_completion(
-        client, f"Array of ten random numbers. Just the array."
+        client, "Array of ten random numbers. Just the array."
     )

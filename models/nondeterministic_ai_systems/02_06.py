@@ -59,5 +59,5 @@ def generate_completion(client, prompt):
 # repeat generate_completion() five times
 for i in range(5):
     generate_completion(
-        client, f"Evaluate this customer feedback: The ducks did not seem to enjoy being hugged."
+        client, "Evaluate this customer feedback: The ducks did not seem to enjoy being hugged."
     )
