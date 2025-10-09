@@ -53,7 +53,7 @@ def generate_completion(client, prompt):
             {"role": "user", "content": prompt}
         ]
     )
-    print("Message: \n" + str(completion.choices[0].message.content))
+    print(f"Message: \n{completion.choices[0].message.content}")
 
 
 # repeat generate_completion() five times

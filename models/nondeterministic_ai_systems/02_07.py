@@ -25,9 +25,9 @@ def generate_completion(client, prompt):
         top_p=1,
         seed=42,
         messages=[
-            {
-              "role": "system",
-              "content": f"You are a helpful assistant."
+                        {
+                            "role": "system",
+                            "content": "You are a helpful assistant."
             },
             {"role": "user", "content": prompt}
         ],
@@ -53,7 +53,7 @@ def generate_completion(client, prompt):
         ],
         tool_choice="auto"
     )
-    print("Message: \n" + str(completion.choices[0].message.content))
+    print(f"Message: \n{completion.choices[0].message.content}")
     print("Function name: \n" + str(completion.choices[0].message.tool_calls[0].function.name))
     print("Function arguments: \n" + str(completion.choices[0].message.tool_calls[0].function.arguments))
 
