@@ -55,18 +55,18 @@ def generate_completion(client, prompt):
         model="gpt-4-turbo-preview",
         temperature=1,
         messages=[
-                        {
-                            "role": "system",
-                            "content": "You are a helpful assistant."
+            {
+                "role": "system",
+                "content": "You are a helpful assistant."
             },
             {"role": "user", "content": prompt}
         ]
     )
-    print(f"Message: \n{completion.choices[0].message.content}")
+    print("Message: \n" + str(completion.choices[0].message.content))
 
 
 # repeat generate_completion() five times
 for i in range(5):
     generate_completion(
-        client, f"Write a haiku about a duck."
+        client, "Write a haiku about a duck."
     )
