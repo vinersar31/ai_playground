@@ -15,6 +15,7 @@ client = OpenAI(
 )
 
 from openai import OpenAI
+
 client = OpenAI()
 
 
@@ -27,14 +28,12 @@ def generate_completion(client, prompt):
                 "content": "You're a sentiment analyst. Analyze the sentiment of the provided statement."
                 # "content": "You're a sentiment analyst. Analyze the sentiment of the provided statement. Give it a classification of positive, neutral, or negative. Give me only the classification, nothing else."
             },
-            {"role": "user", "content": prompt}
-        ]
+            {"role": "user", "content": prompt},
+        ],
     )
     print("Message: \n" + str(completion.choices[0].message.content))
 
 
 # repeat generate_completion() five times
 for i in range(5):
-    generate_completion(
-        client, "Look at the broad wingspan of this duck!"
-    )
+    generate_completion(client, "Look at the broad wingspan of this duck!")

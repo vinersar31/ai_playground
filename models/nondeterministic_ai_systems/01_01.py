@@ -14,7 +14,7 @@ client = OpenAI(
     api_key=os.getenv("OPENAI_API_KEY"),
 )
 
-json_template = '''{
+json_template = """{
   "duck": {
     "id": "1",
     "species": string (species name),
@@ -29,9 +29,10 @@ json_template = '''{
     "length_cm": integer,
     "wingspan_cm": integer
   }
-}'''
+}"""
 
 from openai import OpenAI
+
 client = OpenAI()
 
 
@@ -39,21 +40,13 @@ def generate_completion(client, prompt):
     completion = client.chat.completions.create(
         model="gpt-4-turbo-preview",
         messages=[
-            {
-                "role": "system",
-                "content": "You are a helpful assistant."
-            },
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ]
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": prompt},
+        ],
     )
     print("Message: \n" + str(completion.choices[0].message.content))
 
 
 # repeat generate_completion() five times
 for i in range(5):
-    generate_completion(
-        client, "Write a haiku about a duck."
-    )
+    generate_completion(client, "Write a haiku about a duck.")

@@ -14,7 +14,7 @@ client = OpenAI(
     api_key=os.getenv("OPENAI_API_KEY"),
 )
 
-feedback_template = '''
+feedback_template = """
 # Park Experience
 ## Positive Feedback:
 "Thank you for your wonderful feedback; we're thrilled you enjoyed your visit and look forward to welcoming you back for more fun!"
@@ -44,9 +44,10 @@ feedback_template = '''
 
 ## Negative Feedback:
 "We regret that your experience with the ducks wasn't as expected and would greatly appreciate more details to help us improve in this area."
-'''
+"""
 
 from openai import OpenAI
+
 client = OpenAI()
 
 
@@ -56,12 +57,9 @@ def generate_completion(client, prompt):
         temperature=1,
         top_p=1,
         messages=[
-            {
-                "role": "system",
-                "content": "You are a helpful assistant."
-            },
-            {"role": "user", "content": prompt}
-        ]
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": prompt},
+        ],
     )
     print("Message: \n" + str(completion.choices[0].message.content))
 
@@ -69,6 +67,7 @@ def generate_completion(client, prompt):
 # repeat generate_completion() five times
 for i in range(5):
     generate_completion(
-        client, "Write a haiku about a duck."
+        client,
+        "Write a haiku about a duck."
         # client, "Array of ten random numbers. Just the array."
     )
