@@ -58,14 +58,14 @@ def generate_completion(client, prompt):
         seed=42,
         response_format={'type': 'json_object'},
         messages=[
-            {
-              "role": "system",
-              "content": f"You are a helpful assistant. respond with a JSON object."
+                        {
+                            "role": "system",
+                            "content": "You are a helpful assistant. respond with a JSON object."
             },
             {"role": "user", "content": prompt}
         ]
     )
-    print("Message: \n" + str(completion.choices[0].message.content))
+    print(f"Message: \n{completion.choices[0].message.content}")
 
 
 # repeat generate_completion() five times

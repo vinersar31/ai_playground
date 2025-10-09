@@ -15,12 +15,12 @@ client = OpenAI(
 )
 
 quiz_template = '''
-  What do ducks eat?
+    What do ducks eat?
 
-  A) Only plants  
-  B) Only fish  
-  * C) Seeds, small fish, insects, and plants  
-  D) Chocolate Cake
+    A) Only plants
+    B) Only fish
+    * C) Seeds, small fish, insects, and plants
+    D) Chocolate Cake
 '''
 
 from openai import OpenAI
@@ -31,14 +31,14 @@ def generate_completion(client, prompt):
     completion = client.chat.completions.create(
         model="gpt-4-turbo-preview",
         messages=[
-            {
-              "role": "system",
-              "content": f"You are a helpful assistant. Use {quiz_template} as a template for your answers."
+                        {
+                            "role": "system",
+                            "content": "You are a helpful assistant. Use the quiz template as a template for your answers."
             },
             {"role": "user", "content": prompt}
         ]
     )
-    print("Message: \n" + str(completion.choices[0].message.content))
+    print(f"Message: \n{completion.choices[0].message.content}")
 
 
 # repeat generate_completion() five times
