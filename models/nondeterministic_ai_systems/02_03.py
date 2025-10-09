@@ -1,5 +1,5 @@
 # Baseline example of OpenAI's API
-# 
+#
 # - OpenAI Python library: https://github.com/openai/openai-python
 
 import os
@@ -11,7 +11,7 @@ load_dotenv()
 
 # Create a client
 client = OpenAI(
-  api_key=os.getenv("OPENAI_API_KEY"),
+    api_key=os.getenv("OPENAI_API_KEY"),
 )
 
 feedback_template = '''
@@ -49,24 +49,26 @@ feedback_template = '''
 from openai import OpenAI
 client = OpenAI()
 
+
 def generate_completion(client, prompt):
-  completion = client.chat.completions.create(
-    model="gpt-4-turbo-preview",
-    temperature=1,
-    top_p=1,
-    messages=[
-      {
-        "role": "system", 
-        "content": f"You are a helpful assistant."
-      },
-      {"role": "user", "content": prompt}
-    ]
-  )
-  print("Message: \n" + str(completion.choices[0].message.content))
+    completion = client.chat.completions.create(
+        model="gpt-4-turbo-preview",
+        temperature=1,
+        top_p=1,
+        messages=[
+            {
+              "role": "system",
+              "content": f"You are a helpful assistant."
+            },
+            {"role": "user", "content": prompt}
+        ]
+    )
+    print("Message: \n" + str(completion.choices[0].message.content))
+
 
 # repeat generate_completion() five times
 for i in range(5):
-  generate_completion(
-    client, f"Write a haiku about a duck."
-    # client, f"Array of ten random numbers. Just the array."
-  )
+    generate_completion(
+        client, f"Write a haiku about a duck."
+        # client, f"Array of ten random numbers. Just the array."
+    )
