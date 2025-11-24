@@ -21,6 +21,7 @@ default_instructions = {
 
 complaint_instructions = """You are handling a customer complaint. Show genuine empathy and concern. Acknowledge their frustration explicitly. Focus on immediate resolution steps. Use phrases like 'I understand how frustrating this must be' and 'Let me help you resolve this right away.' Be apologetic and action-oriented."""
 
+
 def check_for_complaint(user_message):
 
     sentiment_check = client.chat.completions.create(
@@ -29,8 +30,9 @@ def check_for_complaint(user_message):
             {"role": "user", "content": f"Is this message a complaint or expressing frustration? Answer only 'yes' or 'no': {user_message}"}
         ]
     )
-    
+
     return sentiment_check.choices[0].message.content.strip().lower() == "yes"
+
 
 def get_response(user_message, conversation_history=[]):
     # Check for complaint
@@ -50,12 +52,14 @@ def get_response(user_message, conversation_history=[]):
         model=model,
         messages=messages
     )
-    
+
     return response
+
 
 # Example usage
 
 # Loop through sample test messages
+
 test_messages = [
     "How long does shipping usually take?",
     "I'm very disappointed. My order arrived broken and customer service hasn't responded!"

@@ -5,13 +5,14 @@ from openai import OpenAI
 client = OpenAI()
 
 # Set the model to use
-model="gpt-5-nano"
+model = "gpt-5-nano"
 
 # Default developer instructions
 default_instructions = {
     "role": "developer",
     "content": "You are a friendly customer service representative for ShopFast, an e-commerce platform. Provide helpful, informative responses. Keep answers concise and professional."
 }
+
 
 def check_for_complaint(user_message):
 
@@ -21,8 +22,9 @@ def check_for_complaint(user_message):
             {"role": "user", "content": f"Is this message a complaint or expressing frustration? Answer only 'yes' or 'no': {user_message}"}
         ]
     )
-    
+
     return sentiment_check.output_text.strip().lower() == "yes"
+
 
 # Get response with custom handling for complaints using the `instructions` parameter to override developer instructions
 def get_response(user_message, conversation_history=[]):
@@ -33,7 +35,7 @@ def get_response(user_message, conversation_history=[]):
     messages = [default_instructions] + conversation_history + [
         {"role": "user", "content": user_message}
     ]
-    
+
     # If complaint detected, override with empathetic instructions
     if is_complaint:
         response = client.responses.create(
@@ -47,7 +49,7 @@ def get_response(user_message, conversation_history=[]):
             model=model,
             input=messages
         )
-    
+
     return response
 
 

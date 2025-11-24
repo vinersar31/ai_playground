@@ -5,7 +5,7 @@ from openai import OpenAI
 client = OpenAI()
 
 # Set the model to use
-model="gpt-5-nano"
+model = "gpt-5-nano"
 
 # Default developer instructions
 default_instructions = {
