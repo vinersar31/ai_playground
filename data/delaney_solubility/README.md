@@ -6,13 +6,13 @@ The **Delaney Solubility Dataset** contains molecular data used to predict aqueo
 
 Each sample in the dataset represents a molecule, described by a set of calculated features:
 
-| Feature               | Description                                                   |
-|-----------------------|---------------------------------------------------------------|
-| `MolLogP`             | Logarithm of the compound’s octanol-water partition coefficient (hydrophobicity) |
-| `MolWt`               | Molecular weight                                              |
-| `NumRotatableBonds`   | Number of rotatable chemical bonds (indicator of molecular flexibility) |
-| `AromaticProportion`  | Proportion of aromatic atoms relative to total heavy atoms    |
-| `logS`                | Target variable — log of aqueous solubility (mol/L)          |
+| Feature              | Description                                                                      |
+| -------------------- | -------------------------------------------------------------------------------- |
+| `MolLogP`            | Logarithm of the compound’s octanol-water partition coefficient (hydrophobicity) |
+| `MolWt`              | Molecular weight                                                                 |
+| `NumRotatableBonds`  | Number of rotatable chemical bonds (indicator of molecular flexibility)          |
+| `AromaticProportion` | Proportion of aromatic atoms relative to total heavy atoms                       |
+| `logS`               | Target variable — log of aqueous solubility (mol/L)                              |
 
 ```math
 logS = f(MolLogP, MolWt, NumRotatableBonds, AromaticProportion)
