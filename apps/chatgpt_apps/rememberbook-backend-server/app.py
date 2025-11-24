@@ -1,9 +1,7 @@
 from flask import Flask, request
 from flask_restful import Api, Resource
 from flask_cors import CORS
-from flasgger import Swagger
 from models import IdeaStore
-import os
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
@@ -12,6 +10,7 @@ api = Api(app)
 # ---------------------------------------------------------------------------
 # Global idea store (SQLite-backed)
 idea_store = IdeaStore(DB_PATH)
+
 
 class IdeaListResource(Resource):
     def get(self):
@@ -63,15 +62,17 @@ class IdeaListResource(Resource):
                   updated_date:
                     type: string
         """
-        include_archived = request.args.get('includeArchived', 'false').lower() == 'true'
-        archived_only = request.args.get('archivedOnly', 'false').lower() == 'true'
+        include_archived = (
+            request.args.get("includeArchived", "false").lower() == "true"
+        )
+        archived_only = request.args.get("archivedOnly", "false").lower() == "true"
         ideas = idea_store.get_all_ideas()
         if archived_only:
             ideas = [i for i in ideas if i.archived]
         elif not include_archived:
             ideas = [i for i in ideas if not i.archived]
         return [idea.to_dict() for idea in ideas]
-    
+
     def post(self):
         """
         Create a new idea
@@ -124,19 +125,20 @@ class IdeaListResource(Resource):
             description: Bad request
         """
         data = request.get_json()
-        
-        if not data or 'title' not in data or 'description' not in data:
-            return {'error': 'Title and description are required'}, 400
-        
-        title = data['title']
-        description = data['description']
-        urgency = data.get('urgency', 3)
-        
+
+        if not data or "title" not in data or "description" not in data:
+            return {"error": "Title and description are required"}, 400
+
+        title = data["title"]
+        description = data["description"]
+        urgency = data.get("urgency", 3)
+
         if urgency not in range(1, 6):
-            return {'error': 'Urgency must be between 1 and 5'}, 400
-        
+            return {"error": "Urgency must be between 1 and 5"}, 400
+
         idea = idea_store.create_idea(title, description, urgency)
         return idea.to_dict(), 201
+
 
 class IdeaResource(Resource):
     def get(self, idea_id):
@@ -185,9 +187,9 @@ class IdeaResource(Resource):
         """
         idea = idea_store.get_idea(idea_id)
         if not idea:
-            return {'error': 'Idea not found'}, 404
+            return {"error": "Idea not found"}, 404
         return idea.to_dict()
-    
+
     def put(self, idea_id):
         """
         Update an existing idea
@@ -263,19 +265,19 @@ class IdeaResource(Resource):
         """
         idea = idea_store.get_idea(idea_id)
         if not idea:
-            return {'error': 'Idea not found'}, 404
-        
+            return {"error": "Idea not found"}, 404
+
         data = request.get_json()
         if not data:
-            return {'error': 'No data provided'}, 400
-        
+            return {"error": "No data provided"}, 400
+
         # Validate urgency if provided
-        if 'urgency' in data and data['urgency'] not in range(1, 6):
-            return {'error': 'Urgency must be between 1 and 5'}, 400
-        
+        if "urgency" in data and data["urgency"] not in range(1, 6):
+            return {"error": "Urgency must be between 1 and 5"}, 400
+
         updated_idea = idea_store.update_idea(idea_id, **data)
         return updated_idea.to_dict()
-    
+
     def delete(self, idea_id):
         """
         Delete an idea
@@ -295,8 +297,9 @@ class IdeaResource(Resource):
             description: Idea not found
         """
         if idea_store.delete_idea(idea_id):
-            return {'message': 'Idea deleted successfully'}
-        return {'error': 'Idea not found'}, 404
+            return {"message": "Idea deleted successfully"}
+        return {"error": "Idea not found"}, 404
+
 
 class IdeaArchiveResource(Resource):
     def post(self, idea_id):
@@ -318,10 +321,11 @@ class IdeaArchiveResource(Resource):
         """
         idea = idea_store.get_idea(idea_id)
         if not idea:
-            return {'error': 'Idea not found'}, 404
+            return {"error": "Idea not found"}, 404
         if not idea.archived:
             idea_store.update_idea(idea_id, archived=True)
-        return {'message': 'Idea archived', 'id': idea_id}
+        return {"message": "Idea archived", "id": idea_id}
+
 
 class IdeaRestoreResource(Resource):
     def post(self, idea_id):
@@ -343,18 +347,20 @@ class IdeaRestoreResource(Resource):
         """
         idea = idea_store.get_idea(idea_id)
         if not idea:
-            return {'error': 'Idea not found'}, 404
+            return {"error": "Idea not found"}, 404
         if idea.archived:
             idea_store.update_idea(idea_id, archived=False)
-        return {'message': 'Idea restored', 'id': idea_id}
+        return {"message": "Idea restored", "id": idea_id}
+
 
 # Register API routes
-api.add_resource(IdeaListResource, '/ideas')
-api.add_resource(IdeaResource, '/ideas/<string:idea_id>')
-api.add_resource(IdeaArchiveResource, '/ideas/<string:idea_id>/archive')
-api.add_resource(IdeaRestoreResource, '/ideas/<string:idea_id>/restore')
+api.add_resource(IdeaListResource, "/ideas")
+api.add_resource(IdeaResource, "/ideas/<string:idea_id>")
+api.add_resource(IdeaArchiveResource, "/ideas/<string:idea_id>/archive")
+api.add_resource(IdeaRestoreResource, "/ideas/<string:idea_id>/restore")
 
-@app.route('/')
+
+@app.route("/")
 def home():
     """
     Home page with API information
@@ -364,37 +370,40 @@ def home():
         description: API information
     """
     return {
-        'message': 'Welcome to Remember Book API',
-        'version': '1.0.0',
-        'endpoints': {
-            'GET /ideas': 'Get all ideas',
-            'POST /ideas': 'Create a new idea',
-            'GET /ideas/<id>': 'Get a specific idea',
-            'PUT /ideas/<id>': 'Update an idea',
-      'DELETE /ideas/<id>': 'Delete an idea',
-      'POST /ideas/<id>/archive': 'Archive an idea',
-      'POST /ideas/<id>/restore': 'Restore an archived idea'
+        "message": "Welcome to Remember Book API",
+        "version": "1.0.0",
+        "endpoints": {
+            "GET /ideas": "Get all ideas",
+            "POST /ideas": "Create a new idea",
+            "GET /ideas/<id>": "Get a specific idea",
+            "PUT /ideas/<id>": "Update an idea",
+            "DELETE /ideas/<id>": "Delete an idea",
+            "POST /ideas/<id>/archive": "Archive an idea",
+            "POST /ideas/<id>/restore": "Restore an archived idea",
         },
-        'swagger_ui': '/apidocs',
-        'urgency_levels': {
-            '1': 'Not Important',
-            '2': 'Low',
-            '3': 'Medium',
-            '4': 'High',
-            '5': 'Immediate'
-        }
+        "swagger_ui": "/apidocs",
+        "urgency_levels": {
+            "1": "Not Important",
+            "2": "Low",
+            "3": "Medium",
+            "4": "High",
+            "5": "Immediate",
+        },
     }
 
-if __name__ == '__main__':
-  # Seed sample data only if database is empty (first run)
-  if idea_store.is_empty():
-    idea_store.create_idea("Learn Python", "Start with basic syntax and data structures", 4)
-    idea_store.create_idea("Buy groceries", "Milk, bread, eggs, and vegetables", 3)
-    idea_store.create_idea("Call mom", "Weekly check-in call", 2)
 
-  print("Remember Book API Server starting...")
-  print(f"Using database file: {DB_PATH}")
-  print(f"Listening on: http://localhost:{PORT}")
-  print(f"API Documentation: http://localhost:{PORT}/apidocs")
-  print("Change port with PORT env var, e.g. PORT=7000 uv run python app.py")
-  app.run(debug=True, host=HOST, port=PORT)
+if __name__ == "__main__":
+    # Seed sample data only if database is empty (first run)
+    if idea_store.is_empty():
+        idea_store.create_idea(
+            "Learn Python", "Start with basic syntax and data structures", 4
+        )
+        idea_store.create_idea("Buy groceries", "Milk, bread, eggs, and vegetables", 3)
+        idea_store.create_idea("Call mom", "Weekly check-in call", 2)
+
+    print("Remember Book API Server starting...")
+    print(f"Using database file: {DB_PATH}")
+    print(f"Listening on: http://localhost:{PORT}")
+    print(f"API Documentation: http://localhost:{PORT}/apidocs")
+    print("Change port with PORT env var, e.g. PORT=7000 uv run python app.py")
+    app.run(debug=True, host=HOST, port=PORT)

@@ -15,6 +15,7 @@ import sqlite3
 import os
 import json
 
+
 class UrgencyLevel(Enum):
     IMMEDIATE = 5
     HIGH = 4
@@ -22,8 +23,11 @@ class UrgencyLevel(Enum):
     LOW = 2
     NOT_IMPORTANT = 1
 
+
 class Idea:
-    def __init__(self, title: str, description: str, urgency: UrgencyLevel = UrgencyLevel.MEDIUM):
+    def __init__(
+        self, title: str, description: str, urgency: UrgencyLevel = UrgencyLevel.MEDIUM
+    ):
         self.id = str(uuid.uuid4())
         self.title = title
         self.description = description
@@ -33,23 +37,27 @@ class Idea:
         self.archived = False  # new flag for archived ideas
         self.created_date = datetime.now().isoformat()
         self.updated_date = datetime.now().isoformat()
-    
+
     def to_dict(self) -> Dict:
         return {
-            'id': self.id,
-            'title': self.title,
-            'description': self.description,
-            'notes': self.notes,  # list of note objects {text, timestamp}
-            'urgency': self.urgency,
-            'archived': self.archived,
-            'created_date': self.created_date,
-            'updated_date': self.updated_date
+            "id": self.id,
+            "title": self.title,
+            "description": self.description,
+            "notes": self.notes,  # list of note objects {text, timestamp}
+            "urgency": self.urgency,
+            "archived": self.archived,
+            "created_date": self.created_date,
+            "updated_date": self.updated_date,
         }
-    
-    def update(self, title: Optional[str] = None, description: Optional[str] = None,
-               notes: Optional[Union[str, List[str], List[Dict[str, Any]]]] = None,
-               urgency: Optional[int] = None,
-               archived: Optional[bool] = None):
+
+    def update(
+        self,
+        title: Optional[str] = None,
+        description: Optional[str] = None,
+        notes: Optional[Union[str, List[str], List[Dict[str, Any]]]] = None,
+        urgency: Optional[int] = None,
+        archived: Optional[bool] = None,
+    ):
         if title is not None:
             self.title = title
         if description is not None:
@@ -59,30 +67,31 @@ class Idea:
             now = datetime.now().isoformat()
             if isinstance(notes, list):
                 for n in notes:
-                    if isinstance(n, dict) and 'text' in n:
-                        text_val = str(n['text']).strip()
+                    if isinstance(n, dict) and "text" in n:
+                        text_val = str(n["text"]).strip()
                         if text_val:
                             # preserve provided timestamp or add current
-                            ts = n.get('timestamp') or now
-                            self.notes.append({'text': text_val, 'timestamp': ts})
+                            ts = n.get("timestamp") or now
+                            self.notes.append({"text": text_val, "timestamp": ts})
                     elif isinstance(n, str):
                         txt = n.strip()
                         if txt:
-                            self.notes.append({'text': txt, 'timestamp': now})
-            elif isinstance(notes, dict) and 'text' in notes:
-                txt = str(notes['text']).strip()
+                            self.notes.append({"text": txt, "timestamp": now})
+            elif isinstance(notes, dict) and "text" in notes:
+                txt = str(notes["text"]).strip()
                 if txt:
-                    ts = notes.get('timestamp') or now
-                    self.notes.append({'text': txt, 'timestamp': ts})
+                    ts = notes.get("timestamp") or now
+                    self.notes.append({"text": txt, "timestamp": ts})
             elif isinstance(notes, str):
                 txt = notes.strip()
                 if txt:
-                    self.notes.append({'text': txt, 'timestamp': now})
+                    self.notes.append({"text": txt, "timestamp": now})
         if urgency is not None:
             self.urgency = urgency
         if archived is not None:
             self.archived = bool(archived)
         self.updated_date = datetime.now().isoformat()
+
 
 class IdeaStore:
     """Persistence layer wrapping a simple SQLite database.
@@ -122,8 +131,10 @@ class IdeaStore:
             # Backfill: add archived column if table existed without it
             cur = conn.execute("PRAGMA table_info(ideas)")
             cols = [r[1] for r in cur.fetchall()]
-            if 'archived' not in cols:
-                conn.execute("ALTER TABLE ideas ADD COLUMN archived INTEGER NOT NULL DEFAULT 0")
+            if "archived" not in cols:
+                conn.execute(
+                    "ALTER TABLE ideas ADD COLUMN archived INTEGER NOT NULL DEFAULT 0"
+                )
             conn.commit()
 
     # --- CRUD operations --------------------------------------------------
@@ -162,29 +173,37 @@ class IdeaStore:
             if isinstance(parsed, list):
                 converted: List[Dict[str, str]] = []
                 for item in parsed:
-                    if isinstance(item, dict) and 'text' in item:
-                        text_val = str(item['text']).strip()
+                    if isinstance(item, dict) and "text" in item:
+                        text_val = str(item["text"]).strip()
                         if text_val:
-                            ts = item.get('timestamp') or datetime.now().isoformat()
-                            converted.append({'text': text_val, 'timestamp': ts})
+                            ts = item.get("timestamp") or datetime.now().isoformat()
+                            converted.append({"text": text_val, "timestamp": ts})
                     elif isinstance(item, str):
                         txt = item.strip()
                         if txt:
-                            converted.append({'text': txt, 'timestamp': datetime.now().isoformat()})
+                            converted.append(
+                                {"text": txt, "timestamp": datetime.now().isoformat()}
+                            )
                 idea.notes = converted
-            elif isinstance(parsed, dict) and 'text' in parsed:
-                txt = str(parsed['text']).strip()
+            elif isinstance(parsed, dict) and "text" in parsed:
+                txt = str(parsed["text"]).strip()
                 if txt:
-                    ts = parsed.get('timestamp') or datetime.now().isoformat()
-                    idea.notes = [{'text': txt, 'timestamp': ts}]
+                    ts = parsed.get("timestamp") or datetime.now().isoformat()
+                    idea.notes = [{"text": txt, "timestamp": ts}]
             elif isinstance(parsed, str):
                 txt = parsed.strip()
-                idea.notes = [{'text': txt, 'timestamp': datetime.now().isoformat()}] if txt else []
+                idea.notes = (
+                    [{"text": txt, "timestamp": datetime.now().isoformat()}]
+                    if txt
+                    else []
+                )
             else:
                 idea.notes = []
         except Exception:
             if raw_notes and raw_notes.strip():
-                idea.notes = [{'text': raw_notes.strip(), 'timestamp': datetime.now().isoformat()}]
+                idea.notes = [
+                    {"text": raw_notes.strip(), "timestamp": datetime.now().isoformat()}
+                ]
             else:
                 idea.notes = []
         # Row layout with archived column: id, title, desc, notes, urgency, archived, created, updated
