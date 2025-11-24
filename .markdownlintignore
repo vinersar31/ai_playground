@@ -1,0 +1,3 @@
+# Ignore all markdown files in the Remember Book app and backend server
+apps/chatgpt_apps/rememberbook-app/**/*.md
+apps/chatgpt_apps/rememberbook-backend-server/**/*.md

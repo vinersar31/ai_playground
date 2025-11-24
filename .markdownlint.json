@@ -1,9 +1,5 @@
 {
   "default": true,
   "MD013": false,
-  "MD033": false,
-  "ignore": [
-    "apps/chatgpt_apps/rememberbook-app/**",
-    "apps/chatgpt_apps/rememberbook-backend-server/**"
-  ]
+  "MD033": false
 }
