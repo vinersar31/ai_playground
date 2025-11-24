@@ -16,7 +16,7 @@ client = OpenAI(
 # Default developer instructions
 default_instructions = {
     "role": "developer",
-    "content": "You are a friendly customer service representative for ShopFast, an e-commerce platform. Provide helpful, informative responses. Keep answers concise and professional."
+    "content": "You are a friendly customer service representative for ShopFast, an e-commerce platform. Provide helpful, informative responses. Keep answers concise and professional.",
 }
 
 complaint_instructions = """You are handling a customer complaint. Show genuine empathy and concern. Acknowledge their frustration explicitly. Focus on immediate resolution steps. Use phrases like 'I understand how frustrating this must be' and 'Let me help you resolve this right away.' Be apologetic and action-oriented."""
@@ -27,8 +27,11 @@ def check_for_complaint(user_message):
     sentiment_check = client.chat.completions.create(
         model=model,
         messages=[
-            {"role": "user", "content": f"Is this message a complaint or expressing frustration? Answer only 'yes' or 'no': {user_message}"}
-        ]
+            {
+                "role": "user",
+                "content": f"Is this message a complaint or expressing frustration? Answer only 'yes' or 'no': {user_message}",
+            }
+        ],
     )
 
     return sentiment_check.choices[0].message.content.strip().lower() == "yes"
@@ -39,19 +42,19 @@ def get_response(user_message, conversation_history=[]):
     is_complaint = check_for_complaint(user_message)
 
     # Build the input with conversation history
-    developer_message = default_instructions if not is_complaint else {
-        "role": "developer",
-        "content": complaint_instructions
-    }
-
-    messages = [developer_message] + conversation_history + [
-        {"role": "user", "content": user_message}
-    ]
-
-    response = client.chat.completions.create(
-        model=model,
-        messages=messages
+    developer_message = (
+        default_instructions
+        if not is_complaint
+        else {"role": "developer", "content": complaint_instructions}
     )
+
+    messages = (
+        [developer_message]
+        + conversation_history
+        + [{"role": "user", "content": user_message}]
+    )
+
+    response = client.chat.completions.create(model=model, messages=messages)
 
     return response
 
@@ -62,7 +65,7 @@ def get_response(user_message, conversation_history=[]):
 
 test_messages = [
     "How long does shipping usually take?",
-    "I'm very disappointed. My order arrived broken and customer service hasn't responded!"
+    "I'm very disappointed. My order arrived broken and customer service hasn't responded!",
 ]
 
 for idx, message in enumerate(test_messages, start=1):

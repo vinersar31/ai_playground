@@ -15,7 +15,7 @@ client = OpenAI(
 # Default developer instructions
 default_instructions = {
     "role": "developer",
-    "content": "You are a friendly customer service representative for ShopFast, an e-commerce platform. Provide helpful, informative responses. Keep answers concise and professional."
+    "content": "You are a friendly customer service representative for ShopFast, an e-commerce platform. Provide helpful, informative responses. Keep answers concise and professional.",
 }
 
 # Customer asks a general question
@@ -23,11 +23,8 @@ response = client.chat.completions.create(
     model=model,
     messages=[
         default_instructions,
-        {
-            "role": "user",
-            "content": "What's your return policy?"
-        }
-    ]
+        {"role": "user", "content": "What's your return policy?"},
+    ],
 )
 
 print(response.choices[0].message.content)
